@@ -61,7 +61,7 @@ const requestInputs = {
   message: document.querySelector("#request-9"),
 };
 
-const whatsappNumber = "88002345678";
+const whatsappNumber = "212655867044";
 
 let allCars = [];
 let filterTimer = null;
