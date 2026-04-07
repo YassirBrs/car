@@ -471,12 +471,14 @@ const buildWhatsappLink = function (car) {
   const rentalRange = formatRentalRange();
   const message = [
     getTranslation("whatsapp_hello", { title }),
-    getTranslation("whatsapp_year", { year }),
-    getTranslation("whatsapp_price", { price }),
-    getTranslation("whatsapp_seats", { seats }),
-    rentalRange ? getTranslation("whatsapp_rental_period", { range: rentalRange }) : getTranslation("whatsapp_period_not_selected"),
+    "",
+    `• ${getTranslation("whatsapp_year", { year })}`,
+    `• ${getTranslation("whatsapp_price", { price })}`,
+    `• ${getTranslation("whatsapp_seats", { seats })}`,
+    `• ${rentalRange ? getTranslation("whatsapp_rental_period", { range: rentalRange }) : getTranslation("whatsapp_period_not_selected")}`,
+    "",
     getTranslation("whatsapp_please_share"),
-  ].join(" ");
+  ].join("\n");
 
   return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 };
@@ -494,7 +496,7 @@ const buildRequestWhatsappLink = function () {
     ? getTranslation("rental_range_from_to", { from: startDate, to: endDate })
     : startDate
       ? getTranslation("rental_range_from_onward", { date: startDate })
-      : endDate
+        : endDate
         ? getTranslation("rental_range_until", { date: endDate })
         : getTranslation("not_provided");
 
@@ -502,16 +504,17 @@ const buildRequestWhatsappLink = function () {
     getTranslation("request_whatsapp_title"),
     getTranslation("request_whatsapp_intro"),
     "",
+    "----",
     `${getTranslation("request_full_name")}: ${formatRequestValue(requestInputs.fullName ? requestInputs.fullName.value : "")}`,
     `${getTranslation("request_phone")}: ${formatRequestValue(requestInputs.phone ? requestInputs.phone.value : "")}`,
     `${getTranslation("request_email")}: ${formatRequestValue(requestInputs.email ? requestInputs.email.value : "")}`,
-    `${getTranslation("request_start_date")}: ${formatRequestValue(startDate)}`,
-    `${getTranslation("request_end_date")}: ${formatRequestValue(endDate)}`,
     `${getTranslation("request_pickup_location")}: ${formatRequestValue(requestInputs.pickupLocation ? requestInputs.pickupLocation.value : "")}`,
     `${getTranslation("request_brand")}: ${formatRequestValue(requestInputs.brand ? requestInputs.brand.value : "")}`,
     `${getTranslation("request_model")}: ${formatRequestValue(requestInputs.model ? requestInputs.model.value : "")}`,
+    `${getTranslation("request_rental_dates")}: ${formatRequestValue(rentalPeriod)}`,
     `${getTranslation("request_message")}: ${formatRequestValue(requestInputs.message ? requestInputs.message.value : "")}`,
-    `${getTranslation("whatsapp_rental_period")}: ${formatRequestValue(rentalPeriod)}`,
+    "----",
+    getTranslation("whatsapp_please_share"),
   ].join("\n");
 
   return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
