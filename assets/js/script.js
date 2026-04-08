@@ -14,6 +14,15 @@ const navbarLinks = document.querySelectorAll("[data-nav-link]");
 const featuredCarList = document.querySelector("[data-featured-car-list]");
 const heroForm = document.querySelector(".hero-form");
 const rentalRequestForm = document.querySelector("[data-rental-request-form]");
+const reserveModal = document.querySelector("[data-reserve-modal]");
+const reserveModalOverlay = document.querySelector("[data-reserve-modal-overlay]");
+const reserveModalClose = document.querySelector("[data-reserve-modal-close]");
+const reserveForm = document.querySelector("[data-reserve-form]");
+const reserveCarImage = document.querySelector("[data-reserve-car-image]");
+const reserveCarPrice = document.querySelector("[data-reserve-car-price]");
+const reserveCarTitle = document.querySelector("[data-reserve-car-title]");
+const reserveExtrasSummary = document.querySelector("[data-reserve-extras-summary]");
+const reserveExtrasTotal = document.querySelector("[data-reserve-extras-total]");
 const languageButtons = document.querySelectorAll("[data-lang-switch]");
 const whatsappWidget = document.querySelector("[data-whatsapp-widget]");
 const whatsappWidgetPanel = document.querySelector("[data-whatsapp-widget-panel]");
@@ -61,12 +70,25 @@ const requestInputs = {
   message: document.querySelector("#request-9"),
 };
 
+const reserveInputs = {
+  firstName: document.querySelector("#reserve-1"),
+  familyName: document.querySelector("#reserve-2"),
+  email: document.querySelector("#reserve-3"),
+  phone: document.querySelector("#reserve-4"),
+  startDate: document.querySelector("#reserve-5"),
+  endDate: document.querySelector("#reserve-6"),
+  insurance: document.querySelectorAll('input[name="reserve-insurance"]'),
+  childSeat: document.querySelector("#reserve-7"),
+  otherExtras: document.querySelector("#reserve-8"),
+};
+
 const whatsappNumber = "212655867044";
 
 let allCars = [];
 let filterTimer = null;
 let translations = {};
 let currentLanguage = getInitialLanguage();
+let selectedReservationCar = null;
 
 const fallbackEnglishTranslations = {
   ...initialDomTexts,
@@ -88,6 +110,9 @@ const fallbackEnglishTranslations = {
   no_cars_match: "No cars match your search.",
   unable_load_cars: "Unable to load cars right now.",
   whatsapp_hello: "Hello, I’m interested in {title}.",
+  whatsapp_car_details: "Car details",
+  whatsapp_request_details: "Request details",
+  whatsapp_customer_details: "Customer details",
   whatsapp_year: "Year: {year}.",
   whatsapp_price: "Price: {price}.",
   whatsapp_seats: "Seats: {seats}.",
@@ -125,6 +150,41 @@ const fallbackEnglishTranslations = {
   request_whatsapp_title: "Rental Request",
   request_whatsapp_intro: "Reach out and let us know if there is anything we can do for you.",
   not_provided: "Not provided",
+  reserve_now: "Reserve",
+  reserve_modal_title: "Complete your reservation",
+  reserve_modal_intro: "Tell us who will drive, which insurance you prefer, and any extras you want.",
+  reserve_modal_kicker: "Reservation window",
+  reserve_selected_car: "Selected car",
+  reserve_booking_dates: "Booking dates",
+  reserve_start_date: "Rental date from",
+  reserve_end_date: "Rental date to",
+  reserve_duration: "Rental duration",
+  reserve_first_name: "First name",
+  reserve_family_name: "Family name",
+  reserve_email: "Email address",
+  reserve_phone: "Phone number",
+  reserve_insurance: "Insurance type",
+  reserve_insurance_regular: "Regular",
+  reserve_insurance_pro: "Pro",
+  reserve_insurance_regular_help: "Standard coverage included",
+  reserve_insurance_pro_help: "Extra coverage + 50 MAD / 5 EUR per day",
+  reserve_extras: "Extra features",
+  reserve_child_seat: "Child seat",
+  reserve_child_seat_help: "Extra 20 MAD / 2 EUR per day",
+  reserve_other_features: "Other extras",
+  reserve_other_features_placeholder: "GPS, second driver, delivery, or anything else...",
+  reserve_submit: "Reserve",
+  reserve_close: "Close reservation form",
+  reserve_summary_title: "Reservation summary",
+  reserve_primary_driver: "Primary driver",
+  reserve_insurance_label: "Insurance",
+  reserve_selected_extras: "Selected extras",
+  reserve_no_extras: "No extra features selected",
+  reserve_additional_notes: "Additional notes",
+  reserve_extras_total: "Estimated add-on total",
+  reserve_estimated_total: "Estimated total",
+  reserve_price_breakdown: "Price breakdown",
+  reserve_daily_price: "Daily price",
 };
 
 const navToggleFunc = function () {
@@ -460,6 +520,43 @@ const formatRentalRange = function () {
   return "";
 };
 
+const formatReserveRange = function () {
+  const rentalFrom = formatRentalDate(reserveInputs.startDate ? reserveInputs.startDate.value : "");
+  const rentalTo = formatRentalDate(reserveInputs.endDate ? reserveInputs.endDate.value : "");
+
+  if (rentalFrom && rentalTo) {
+    return getTranslation("rental_range_from_to", { from: rentalFrom, to: rentalTo });
+  }
+
+  if (rentalFrom) {
+    return getTranslation("rental_range_from_onward", { date: rentalFrom });
+  }
+
+  if (rentalTo) {
+    return getTranslation("rental_range_until", { date: rentalTo });
+  }
+
+  return "";
+};
+
+const getReservationDurationDays = function () {
+  if (!reserveInputs.startDate || !reserveInputs.endDate || !reserveInputs.startDate.value || !reserveInputs.endDate.value) {
+    return 1;
+  }
+
+  const start = new Date(`${reserveInputs.startDate.value}T00:00:00`);
+  const end = new Date(`${reserveInputs.endDate.value}T00:00:00`);
+
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    return 1;
+  }
+
+  const diffMs = end.getTime() - start.getTime();
+  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+  return diffDays > 0 ? diffDays : 1;
+};
+
 const buildWhatsappLink = function (car) {
   const title = car.name || [car.brand, car.model].filter(Boolean).join(" ") || "this car";
   const year = car.year || "N/A";
@@ -472,6 +569,7 @@ const buildWhatsappLink = function (car) {
   const message = [
     getTranslation("whatsapp_hello", { title }),
     "",
+    `*${getTranslation("whatsapp_car_details")}*`,
     `• ${getTranslation("whatsapp_year", { year })}`,
     `• ${getTranslation("whatsapp_price", { price })}`,
     `• ${getTranslation("whatsapp_seats", { seats })}`,
@@ -489,6 +587,219 @@ const formatRequestValue = function (value) {
   return cleanedValue || getTranslation("not_provided");
 };
 
+const getSelectedInsuranceChoice = function () {
+  const selected = Array.from(reserveInputs.insurance || []).find(function (input) {
+    return input.checked;
+  });
+
+  return selected ? selected.value : "regular";
+};
+
+const getReservationExtras = function () {
+  const extras = [];
+
+  if (reserveInputs.childSeat && reserveInputs.childSeat.checked) {
+    extras.push(`1 ${getTranslation("reserve_child_seat")} (+20 MAD / 2 EUR / day)`);
+  }
+
+  return extras;
+};
+
+const getReservationExtrasTotal = function () {
+  const days = getReservationDurationDays();
+  let totalMad = 0;
+  let totalEur = 0;
+  const items = [];
+
+  const insuranceChoice = getSelectedInsuranceChoice();
+
+  if (insuranceChoice === "pro") {
+    totalMad += 50 * days;
+    totalEur += 5 * days;
+    items.push(`+50 MAD / +5 EUR x ${days} (${getTranslation("reserve_insurance_pro")})`);
+  }
+
+  if (reserveInputs.childSeat && reserveInputs.childSeat.checked) {
+    totalMad += 20 * days;
+    totalEur += 2 * days;
+    items.push(`+20 MAD / +2 EUR x ${days} (${getTranslation("reserve_child_seat")})`);
+  }
+
+  return {
+    items,
+    totalMad,
+    totalEur,
+  };
+};
+
+const getReservationQuote = function () {
+  const extras = getReservationExtrasTotal();
+  const days = getReservationDurationDays();
+  const baseMad = Number(selectedReservationCar && selectedReservationCar.price_mad ? selectedReservationCar.price_mad : 0);
+  const baseEur = Number(selectedReservationCar && selectedReservationCar.price_eur ? selectedReservationCar.price_eur : 0);
+  const dailyMad = Number.isFinite(baseMad) ? baseMad : 0;
+  const dailyEur = Number.isFinite(baseEur) ? baseEur : 0;
+  const carMad = dailyMad * days;
+  const carEur = dailyEur * days;
+
+  return {
+    days,
+    baseMad: dailyMad,
+    baseEur: dailyEur,
+    extrasMad: extras.totalMad,
+    extrasEur: extras.totalEur,
+    carMad,
+    carEur,
+    totalMad: carMad + extras.totalMad,
+    totalEur: carEur + extras.totalEur,
+    extraItems: extras.items,
+  };
+};
+
+const updateReserveModalSummary = function () {
+  if (!selectedReservationCar) {
+    return;
+  }
+
+  const title = selectedReservationCar.name || [selectedReservationCar.brand, selectedReservationCar.model].filter(Boolean).join(" ");
+  const quote = getReservationQuote();
+  const rentalRange = formatReserveRange() || formatRentalRange();
+  const basePrice = formatPrice(selectedReservationCar);
+  const imageUrl = selectedReservationCar.image_url || "";
+
+  if (reserveCarTitle) {
+    reserveCarTitle.textContent = title;
+  }
+
+  if (reserveCarImage) {
+    if (imageUrl) {
+      reserveCarImage.src = imageUrl;
+      reserveCarImage.alt = title;
+      reserveCarImage.hidden = false;
+    } else {
+      reserveCarImage.removeAttribute("src");
+      reserveCarImage.alt = "";
+      reserveCarImage.hidden = true;
+    }
+  }
+
+  if (reserveCarPrice) {
+    reserveCarPrice.textContent = quote.days > 1
+      ? `${quote.days} nights · ${basePrice.secondary ? `${basePrice.primary} / day · ${basePrice.secondary} / day` : `${basePrice.primary} / day`}`
+      : `${basePrice.secondary ? `${basePrice.primary} / day · ${basePrice.secondary} / day` : `${basePrice.primary} / day`}`;
+  }
+
+  if (reserveExtrasSummary) {
+    reserveExtrasSummary.textContent = quote.extraItems.length
+      ? quote.extraItems.join(" · ")
+      : getTranslation("reserve_no_extras");
+  }
+
+  if (reserveExtrasTotal) {
+    reserveExtrasTotal.textContent = quote.extrasMad || quote.extrasEur
+      ? `${getTranslation("reserve_extras_total")}: +${quote.extrasMad} MAD / +${quote.extrasEur} EUR`
+      : `${getTranslation("reserve_extras_total")}: ${getTranslation("reserve_no_extras")}`;
+  }
+
+  const bookingDatesNode = document.querySelector("[data-reserve-booking-dates]");
+  if (bookingDatesNode) {
+    bookingDatesNode.textContent = rentalRange || getTranslation("not_provided");
+  }
+
+  const durationNode = document.querySelector("[data-reserve-duration]");
+  if (durationNode) {
+    durationNode.textContent = quote.days > 1 ? `${quote.days} days` : "1 day";
+  }
+
+  const estimatedTotalNode = document.querySelector("[data-reserve-estimated-total]");
+  if (estimatedTotalNode) {
+    estimatedTotalNode.textContent = `${getTranslation("reserve_estimated_total")}: ${quote.totalMad || quote.totalEur ? `${quote.totalMad} MAD / ${quote.totalEur} EUR` : getTranslation("price_on_request")}`;
+  }
+};
+
+const openReserveModal = function (car) {
+  selectedReservationCar = car;
+  if (reserveForm) {
+    reserveForm.reset();
+  }
+
+  if (reserveInputs.startDate && searchInputs.rentalFrom) {
+    reserveInputs.startDate.value = searchInputs.rentalFrom.value || "";
+  }
+
+  if (reserveInputs.endDate && searchInputs.rentalTo) {
+    reserveInputs.endDate.value = searchInputs.rentalTo.value || "";
+  }
+
+  updateReserveModalSummary();
+
+  if (reserveModal) {
+    reserveModal.hidden = false;
+    reserveModal.classList.add("is-open");
+  }
+
+  document.body.classList.add("modal-open");
+
+  window.setTimeout(function () {
+    if (reserveInputs.firstName) {
+      reserveInputs.firstName.focus();
+    }
+  }, 0);
+};
+
+const closeReserveModal = function () {
+  if (reserveModal) {
+    reserveModal.classList.remove("is-open");
+    reserveModal.hidden = true;
+  }
+
+  document.body.classList.remove("modal-open");
+};
+
+const buildReservationWhatsappLink = function (car) {
+  const title = car.name || [car.brand, car.model].filter(Boolean).join(" ") || "this car";
+  const insuranceChoice = getSelectedInsuranceChoice();
+  const insuranceLabel = insuranceChoice === "pro"
+    ? `${getTranslation("reserve_insurance_pro")} (+50 MAD / 5 EUR / day)`
+    : getTranslation("reserve_insurance_regular");
+  const quote = getReservationQuote();
+  const rentalRange = formatReserveRange() || formatRentalRange();
+  const fullName = [reserveInputs.firstName ? reserveInputs.firstName.value : "", reserveInputs.familyName ? reserveInputs.familyName.value : ""]
+    .map(function (value) {
+      return String(value || "").trim();
+    })
+    .filter(Boolean)
+    .join(" ");
+
+  const message = [
+    `*${getTranslation("reserve_modal_title")}*`,
+    "",
+    `*${getTranslation("reserve_selected_car")}*`,
+    `• ${title}`,
+    `• ${getTranslation("reserve_daily_price")}: ${quote.baseMad || quote.baseEur ? `${quote.baseMad} MAD / ${quote.baseEur} EUR` : formatPrice(car).primary}`,
+    "",
+    `*${getTranslation("reserve_summary_title")}*`,
+    `• ${getTranslation("reserve_primary_driver")}: ${formatRequestValue(fullName)}`,
+    `• ${getTranslation("reserve_email")}: ${formatRequestValue(reserveInputs.email ? reserveInputs.email.value : "")}`,
+    `• ${getTranslation("reserve_phone")}: ${formatRequestValue(reserveInputs.phone ? reserveInputs.phone.value : "")}`,
+    `• ${getTranslation("reserve_insurance_label")}: ${insuranceLabel}`,
+    `• ${getTranslation("reserve_booking_dates")}: ${formatRequestValue(rentalRange || getTranslation("not_provided"))}`,
+    `• ${getTranslation("reserve_duration")}: ${quote.days > 1 ? `${quote.days} days` : "1 day"}`,
+    "",
+    `*${getTranslation("reserve_selected_extras")}*`,
+    ...(quote.extraItems.length ? quote.extraItems.map(function (extra) { return `• ${extra}`; }) : [`• ${getTranslation("reserve_no_extras")}`]),
+    "",
+    `*${getTranslation("reserve_additional_notes")}*`,
+    `• ${formatRequestValue(reserveInputs.otherExtras ? reserveInputs.otherExtras.value : "")}`,
+    "",
+    `*${getTranslation("reserve_price_breakdown")}*`,
+    `• ${getTranslation("reserve_daily_price")}: ${quote.days > 1 ? `${quote.baseMad} MAD / ${quote.baseEur} EUR x ${quote.days}` : `${quote.baseMad} MAD / ${quote.baseEur} EUR`}`,
+    `• ${getTranslation("reserve_estimated_total")}: ${quote.totalMad || quote.totalEur ? `${quote.totalMad} MAD / ${quote.totalEur} EUR` : getTranslation("price_on_request")}`,
+  ].join("\n");
+
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+};
+
 const buildRequestWhatsappLink = function () {
   const startDate = requestInputs.startDate ? formatRentalDate(requestInputs.startDate.value) : "";
   const endDate = requestInputs.endDate ? formatRentalDate(requestInputs.endDate.value) : "";
@@ -501,19 +812,21 @@ const buildRequestWhatsappLink = function () {
         : getTranslation("not_provided");
 
   const message = [
-    getTranslation("request_whatsapp_title"),
+    `*${getTranslation("request_whatsapp_title")}*`,
     getTranslation("request_whatsapp_intro"),
     "",
-    "----",
+    `*${getTranslation("whatsapp_customer_details")}*`,
     `${getTranslation("request_full_name")}: ${formatRequestValue(requestInputs.fullName ? requestInputs.fullName.value : "")}`,
     `${getTranslation("request_phone")}: ${formatRequestValue(requestInputs.phone ? requestInputs.phone.value : "")}`,
     `${getTranslation("request_email")}: ${formatRequestValue(requestInputs.email ? requestInputs.email.value : "")}`,
+    "",
+    `*${getTranslation("whatsapp_request_details")}*`,
     `${getTranslation("request_pickup_location")}: ${formatRequestValue(requestInputs.pickupLocation ? requestInputs.pickupLocation.value : "")}`,
     `${getTranslation("request_brand")}: ${formatRequestValue(requestInputs.brand ? requestInputs.brand.value : "")}`,
     `${getTranslation("request_model")}: ${formatRequestValue(requestInputs.model ? requestInputs.model.value : "")}`,
     `${getTranslation("request_rental_dates")}: ${formatRequestValue(rentalPeriod)}`,
     `${getTranslation("request_message")}: ${formatRequestValue(requestInputs.message ? requestInputs.message.value : "")}`,
-    "----",
+    "",
     getTranslation("whatsapp_please_share"),
   ].join("\n");
 
@@ -533,7 +846,7 @@ const renderCarCard = function (car) {
   const features = Array.isArray(car.features) ? car.features.slice(0, 3) : [];
   const price = formatPrice(car);
   const imageUrl = car.image_url || "";
-  const rentNowLabel = getTranslation("rent_now");
+  const reserveNowLabel = getTranslation("reserve_now");
 
   return `
     <li>
@@ -585,15 +898,15 @@ const renderCarCard = function (car) {
               <ion-icon name="heart-outline"></ion-icon>
             </button>
 
-            <a
-              class="btn"
-              href="${buildWhatsappLink(car)}"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              class="btn reserve-btn"
+              data-open-reserve-modal
+              data-reserve-car-id="${escapeHtml(String(car.id || ""))}"
               aria-label="${escapeHtml(getTranslation("rent_now_aria", { title }))}"
             >
-              ${escapeHtml(rentNowLabel)}
-            </a>
+              ${escapeHtml(reserveNowLabel)}
+            </button>
           </div>
         </div>
       </div>
@@ -701,6 +1014,68 @@ const bindWhatsappWidget = function () {
   });
 };
 
+const bindReserveModal = function () {
+  if (featuredCarList) {
+    featuredCarList.addEventListener("click", function (event) {
+      const trigger = event.target.closest("[data-open-reserve-modal]");
+
+      if (!trigger) {
+        return;
+      }
+
+      const carId = Number(trigger.getAttribute("data-reserve-car-id"));
+      const car = allCars.find(function (item) {
+        return Number(item.id) === carId;
+      });
+
+      if (!car) {
+        return;
+      }
+
+      openReserveModal(car);
+    });
+  }
+
+  if (reserveModalOverlay) {
+    reserveModalOverlay.addEventListener("click", closeReserveModal);
+  }
+
+  if (reserveModalClose) {
+    reserveModalClose.addEventListener("click", closeReserveModal);
+  }
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && reserveModal && reserveModal.classList.contains("is-open")) {
+      closeReserveModal();
+    }
+  });
+};
+
+const bindReserveForm = function () {
+  if (!reserveForm) {
+    return;
+  }
+
+  reserveForm.addEventListener("input", function () {
+    updateReserveModalSummary();
+  });
+
+  reserveForm.addEventListener("change", function () {
+    updateReserveModalSummary();
+  });
+
+  reserveForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    if (!selectedReservationCar) {
+      return;
+    }
+
+    window.open(buildReservationWhatsappLink(selectedReservationCar), "_blank", "noopener,noreferrer");
+    closeReserveModal();
+  });
+};
+
 const bindRentalRequestForm = function () {
   if (!rentalRequestForm) {
     return;
@@ -783,6 +1158,8 @@ const initialize = async function () {
   applyStaticTranslations();
   bindLanguageSwitch();
   bindWhatsappWidget();
+  bindReserveModal();
+  bindReserveForm();
   bindRentalRequestForm();
   bindHeroForm();
   await loadFeaturedCars();

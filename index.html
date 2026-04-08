@@ -662,8 +662,194 @@
         </div>
       </section>
 
+      <!-- 
+        - #REVIEWS
+      -->
+
+      <section class="section reviews" id="reviews">
+        <div class="container">
+
+          <div class="reviews-header">
+            <p class="reviews-kicker" data-i18n="reviews_kicker">Reviews</p>
+            <h2 class="h2 section-title" data-i18n="reviews_title">What people say after renting with us</h2>
+            <p class="reviews-text" data-i18n="reviews_text">A few words from customers who used Ridex Agadir for city trips, airport pickups, and coastal drives.</p>
+          </div>
+
+          <ul class="reviews-list">
+            <li class="reviews-item">
+              <article class="review-card">
+                <div class="review-card-head">
+                  <div class="review-avatar">Y</div>
+                  <div>
+                    <h3 class="h3 review-name" data-i18n="review1_name">Youssef A.</h3>
+                    <p class="review-meta" data-i18n="review1_meta">Airport pickup, Agadir</p>
+                  </div>
+                </div>
+                <p class="review-rating" aria-label="5 out of 5 stars">★★★★★</p>
+                <p class="review-text" data-i18n="review1_text">The car was clean, the pickup was fast, and the WhatsApp booking made everything easy. Perfect for our family weekend in Agadir.</p>
+              </article>
+            </li>
+
+            <li class="reviews-item">
+              <article class="review-card">
+                <div class="review-card-head">
+                  <div class="review-avatar">S</div>
+                  <div>
+                    <h3 class="h3 review-name" data-i18n="review2_name">Sara M.</h3>
+                    <p class="review-meta" data-i18n="review2_meta">Taghazout surf trip</p>
+                  </div>
+                </div>
+                <p class="review-rating" aria-label="5 out of 5 stars">★★★★★</p>
+                <p class="review-text" data-i18n="review2_text">We rented an automatic for a surf trip to Taghazout and Imsouane. Smooth service, fair price, and the car was ready on time.</p>
+              </article>
+            </li>
+
+            <li class="reviews-item">
+              <article class="review-card">
+                <div class="review-card-head">
+                  <div class="review-avatar">M</div>
+                  <div>
+                    <h3 class="h3 review-name" data-i18n="review3_name">Mourad K.</h3>
+                    <p class="review-meta" data-i18n="review3_meta">City delivery, Agadir</p>
+                  </div>
+                </div>
+                <p class="review-rating" aria-label="5 out of 5 stars">★★★★★</p>
+                <p class="review-text" data-i18n="review3_text">Great communication, no surprises, and the child seat was prepared as requested. I’d book again without thinking twice.</p>
+              </article>
+            </li>
+          </ul>
+
+        </div>
+      </section>
+
     </article>
   </main>
+
+  <div class="reserve-modal" data-reserve-modal hidden>
+    <div class="reserve-modal-overlay" data-reserve-modal-overlay></div>
+
+    <div class="reserve-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="reserve-modal-title">
+      <button type="button" class="reserve-modal-close" data-reserve-modal-close aria-label="Close reservation form">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+
+      <div class="reserve-modal-header">
+        <p class="reserve-modal-kicker" data-i18n="reserve_modal_kicker">Reservation window</p>
+        <h2 class="h2 reserve-modal-title" id="reserve-modal-title" data-i18n="reserve_modal_title">
+          Complete your reservation
+        </h2>
+        <p class="reserve-modal-intro" data-i18n="reserve_modal_intro">
+          Tell us who will drive, which insurance you prefer, and any extras you want.
+        </p>
+      </div>
+
+      <div class="reserve-modal-summary">
+        <div class="reserve-summary-top">
+          <figure class="reserve-summary-media">
+            <img src="" alt="" class="reserve-summary-image" data-reserve-car-image hidden>
+          </figure>
+
+          <div class="reserve-summary-copy">
+            <p class="reserve-summary-label" data-i18n="reserve_selected_car">Selected car</p>
+            <h3 class="h3 reserve-summary-title" data-reserve-car-title>Selected car</h3>
+            <p class="reserve-summary-line">
+              <span class="reserve-summary-line-label" data-i18n="reserve_booking_dates">Booking dates</span>
+              <span class="reserve-summary-line-value" data-reserve-booking-dates>Not provided</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="reserve-summary-block">
+          <p class="reserve-summary-price" data-reserve-car-price></p>
+          <p class="reserve-summary-block-title" data-i18n="reserve_selected_extras">Selected extras</p>
+          <p class="reserve-summary-extras" data-reserve-extras-summary data-i18n="reserve_no_extras">No extra features selected</p>
+          <p class="reserve-summary-total" data-reserve-extras-total>+0 MAD / +0 EUR</p>
+        </div>
+      </div>
+
+      <form class="reserve-form" data-reserve-form>
+        <div class="reserve-form-grid">
+          <div class="request-field">
+            <label for="reserve-1" class="input-label" data-i18n="reserve_first_name">First name</label>
+            <input type="text" id="reserve-1" class="input-field" autocomplete="given-name" required>
+          </div>
+
+          <div class="request-field">
+            <label for="reserve-2" class="input-label" data-i18n="reserve_family_name">Family name</label>
+            <input type="text" id="reserve-2" class="input-field" autocomplete="family-name" required>
+          </div>
+
+          <div class="request-field">
+            <label for="reserve-3" class="input-label" data-i18n="reserve_email">Email address</label>
+            <input type="email" id="reserve-3" class="input-field" autocomplete="email" required>
+          </div>
+
+          <div class="request-field">
+            <label for="reserve-4" class="input-label" data-i18n="reserve_phone">Phone number</label>
+            <input type="tel" id="reserve-4" class="input-field" autocomplete="tel" required>
+          </div>
+
+          <div class="request-field">
+            <label for="reserve-5" class="input-label" data-i18n="reserve_start_date">Rental date from</label>
+            <input type="date" id="reserve-5" class="input-field" required>
+          </div>
+
+          <div class="request-field">
+            <label for="reserve-6" class="input-label" data-i18n="reserve_end_date">Rental date to</label>
+            <input type="date" id="reserve-6" class="input-field" required>
+          </div>
+
+          <div class="request-field request-field--wide">
+            <p class="input-label" data-i18n="reserve_insurance">Insurance type</p>
+
+            <div class="reserve-option-group">
+              <label class="reserve-option">
+                <input type="radio" name="reserve-insurance" value="regular" checked>
+                <span class="reserve-option-main" data-i18n="reserve_insurance_regular">Regular</span>
+                <span class="reserve-option-help" data-i18n="reserve_insurance_regular_help">Standard coverage included</span>
+              </label>
+
+              <label class="reserve-option">
+                <input type="radio" name="reserve-insurance" value="pro">
+                <span class="reserve-option-main" data-i18n="reserve_insurance_pro">Pro</span>
+                <span class="reserve-option-help" data-i18n="reserve_insurance_pro_help">Extra coverage + 50 MAD / 5 EUR</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="request-field request-field--wide">
+            <p class="input-label" data-i18n="reserve_extras">Extra features</p>
+
+            <label class="reserve-check">
+              <input type="checkbox" id="reserve-7">
+              <span>
+                <span class="reserve-option-main" data-i18n="reserve_child_seat">Child seat</span>
+                <span class="reserve-option-help" data-i18n="reserve_child_seat_help">Extra 20 MAD / 2 EUR</span>
+              </span>
+            </label>
+          </div>
+
+          <div class="request-field request-field--wide">
+            <label for="reserve-8" class="input-label" data-i18n="reserve_other_features">Other extras</label>
+            <textarea id="reserve-8" class="input-field request-textarea" rows="4" data-i18n-placeholder="reserve_other_features_placeholder" placeholder="GPS, second driver, delivery, or anything else..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn request-submit" data-i18n="reserve_submit">Reserve</button>
+      </form>
+
+      <div class="reserve-modal-footer">
+        <div class="reserve-modal-footer-copy">
+          <p class="reserve-modal-footer-label" data-i18n="reserve_price_breakdown">Price breakdown</p>
+          <p class="reserve-modal-footer-meta">
+            <span class="reserve-modal-footer-meta-label" data-i18n="reserve_duration">Rental duration</span>
+            <span class="reserve-modal-footer-meta-value" data-reserve-duration>1 day</span>
+          </p>
+          <p class="reserve-summary-grand-total" data-reserve-estimated-total>Estimated total: Price on request</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 
