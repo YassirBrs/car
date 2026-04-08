@@ -1460,23 +1460,17 @@ button, a { transition: var(--transition); }
 }
 
 .reserve-modal-footer {
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
   margin-top: 18px;
-  padding-top: 16px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), var(--white) 28%);
+  padding-top: 8px;
 }
 
 .reserve-modal-footer-copy {
-  background: hsla(0, 0%, 100%, 0.96);
-  border-top: 1px solid hsla(219, 14%, 60%, 0.16);
-  border-left: none;
-  border-right: none;
-  border-bottom: none;
-  border-radius: 0;
-  padding: 14px 0 0;
-  box-shadow: none;
+  background:
+    linear-gradient(145deg, hsla(216, 75%, 97%, 0.96), hsla(0, 0%, 100%, 0.98)),
+    var(--white);
+  border: 1px solid hsla(204, 91%, 53%, 0.1);
+  border-radius: 20px;
+  padding: 16px 18px;
 }
 
 .reserve-modal-footer-label {
@@ -1492,10 +1486,12 @@ button, a { transition: var(--transition); }
 .reserve-modal-footer-meta {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 14px;
-  padding-bottom: 10px;
+  padding: 10px 12px;
   margin-bottom: 10px;
-  border-bottom: 1px dashed hsla(219, 14%, 60%, 0.16);
+  border: 1px dashed hsla(219, 14%, 60%, 0.24);
+  border-radius: 14px;
   color: var(--independence);
   font-size: var(--fs-6);
   line-height: 1.65;
@@ -2105,11 +2101,11 @@ button, a { transition: var(--transition); }
   }
 
   .reserve-modal-footer {
-    padding-top: 12px;
+    padding-top: 6px;
   }
 
   .reserve-modal-footer-copy {
-    padding: 14px 16px;
+    padding: 14px;
   }
 
   .reserve-modal-footer-meta {

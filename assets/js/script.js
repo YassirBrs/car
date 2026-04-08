@@ -4,8 +4,9 @@
  * navbar toggle
  */
 
-const DEFAULT_LANGUAGE = "en";
-const SUPPORTED_LANGUAGES = ["en", "fr"];
+const DEFAULT_LANGUAGE = "fr";
+const SUPPORTED_LANGUAGES = ["fr", "en"];
+const SECONDARY_LANGUAGE = "en";
 
 const overlay = document.querySelector("[data-overlay]");
 const navbar = document.querySelector("[data-navbar]");
@@ -257,8 +258,9 @@ function formatTemplate(template, values) {
 
 function getTranslation(key, values = {}) {
   const currentTable = translations[currentLanguage] || {};
-  const fallbackTable = translations[DEFAULT_LANGUAGE] || {};
-  const rawValue = currentTable[key] ?? fallbackTable[key] ?? key;
+  const primaryFallbackTable = translations[DEFAULT_LANGUAGE] || {};
+  const secondaryFallbackTable = translations[SECONDARY_LANGUAGE] || {};
+  const rawValue = currentTable[key] ?? primaryFallbackTable[key] ?? secondaryFallbackTable[key] ?? key;
 
   return formatTemplate(rawValue, values);
 }
@@ -1076,6 +1078,37 @@ const bindReserveForm = function () {
   });
 };
 
+const bindDateInputUX = function () {
+  const dateInputs = Array.from(document.querySelectorAll('input[type="date"]'));
+
+  dateInputs.forEach(function (input) {
+    input.addEventListener("change", function () {
+      input.blur();
+    });
+  });
+
+  const syncDateRange = function (startInput, endInput) {
+    if (!startInput || !endInput) {
+      return;
+    }
+
+    const syncMinDate = function () {
+      endInput.min = startInput.value || "";
+
+      if (endInput.value && startInput.value && endInput.value < startInput.value) {
+        endInput.value = startInput.value;
+      }
+    };
+
+    syncMinDate();
+    startInput.addEventListener("change", syncMinDate);
+  };
+
+  syncDateRange(searchInputs.rentalFrom, searchInputs.rentalTo);
+  syncDateRange(requestInputs.startDate, requestInputs.endDate);
+  syncDateRange(reserveInputs.startDate, reserveInputs.endDate);
+};
+
 const bindRentalRequestForm = function () {
   if (!rentalRequestForm) {
     return;
@@ -1162,6 +1195,7 @@ const initialize = async function () {
   bindReserveForm();
   bindRentalRequestForm();
   bindHeroForm();
+  bindDateInputUX();
   await loadFeaturedCars();
 };
 
