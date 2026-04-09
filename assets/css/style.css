@@ -418,7 +418,14 @@ button, a { transition: var(--transition); }
   max-width: 52ch;
 }
 
-.hero-banner { display: none; }
+.hero-banner {
+  display: none;
+  background-image: url("../images/hero-banner.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  background-color: hsla(216, 75%, 97%, 0.9);
+}
 
 .hero-form {
   background: var(--gradient);
@@ -1459,6 +1466,16 @@ button, a { transition: var(--transition); }
   line-height: 1.4;
 }
 
+.reserve-summary-grand-total--hero {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid hsla(204, 91%, 53%, 0.22);
+  background: linear-gradient(135deg, hsla(204, 91%, 53%, 0.12), hsla(152, 63%, 43%, 0.1));
+  color: var(--space-cadet);
+  box-shadow: 0 10px 20px hsla(204, 91%, 53%, 0.12);
+}
+
 .reserve-modal-footer {
   margin-top: 18px;
   padding-top: 8px;
@@ -1939,11 +1956,10 @@ button, a { transition: var(--transition); }
     right: auto;
     bottom: auto;
     width: 100%;
-    min-height: 220px;
+    min-height: clamp(220px, 48vw, 340px);
+    aspect-ratio: 16 / 10;
     margin-bottom: 18px;
     border-radius: 24px;
-    background: url("../images/hero-banner.jpg") no-repeat center center;
-    background-size: cover;
     box-shadow: var(--shadow-1);
   }
 
@@ -2128,7 +2144,7 @@ button, a { transition: var(--transition); }
   }
 
   .hero-banner {
-    min-height: 190px;
+    min-height: clamp(180px, 52vw, 260px);
     margin-bottom: 14px;
     border-radius: 20px;
   }
@@ -2381,14 +2397,13 @@ button, a { transition: var(--transition); }
 
   .hero-banner {
     display: block;
-    background: url("../images/hero-banner.jpg") no-repeat;
-    background-size: cover;
-    background-position: left;
+    background-position: center right;
     position: absolute;
     top: 100px;
     bottom: 50px;
-    left: 65%;
-    width: 500px;
+    left: auto;
+    right: 20px;
+    width: min(46vw, 560px);
     border-radius: 30px;
     z-index: -1;
   }
@@ -2568,8 +2583,8 @@ button, a { transition: var(--transition); }
 
   .hero-banner {
     left: auto;
-    right: 50px;
-    width: 630px;
+    right: 30px;
+    width: min(47vw, 680px);
   }
 
   .hero-form { max-width: 900px; }

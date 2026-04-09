@@ -81,7 +81,8 @@ const reserveInputs = {
   endDate: document.querySelector("#reserve-6"),
   insurance: document.querySelectorAll('input[name="reserve-insurance"]'),
   childSeat: document.querySelector("#reserve-7"),
-  otherExtras: document.querySelector("#reserve-8"),
+  secondDriver: document.querySelector("#reserve-8"),
+  otherExtras: document.querySelector("#reserve-9"),
 };
 
 const whatsappNumber = "212655867044";
@@ -176,8 +177,10 @@ const fallbackEnglishTranslations = {
   reserve_extras: "Extra features",
   reserve_child_seat: "Child seat",
   reserve_child_seat_help: "Extra 20 MAD / 2 EUR per day",
+  reserve_second_driver: "Second driver",
+  reserve_second_driver_help: "Extra 20 MAD / 2 EUR per day",
   reserve_other_features: "Other extras",
-  reserve_other_features_placeholder: "GPS, second driver, delivery, or anything else...",
+  reserve_other_features_placeholder: "GPS, delivery, or anything else...",
   reserve_submit: "Reserve",
   reserve_close: "Close reservation form",
   reserve_summary_title: "Reservation summary",
@@ -679,6 +682,10 @@ const getReservationExtras = function () {
     extras.push(`1 ${getTranslation("reserve_child_seat")} (+20 MAD / 2 EUR / day)`);
   }
 
+  if (reserveInputs.secondDriver && reserveInputs.secondDriver.checked) {
+    extras.push(`1 ${getTranslation("reserve_second_driver")} (+20 MAD / 2 EUR / day)`);
+  }
+
   return extras;
 };
 
@@ -700,6 +707,12 @@ const getReservationExtrasTotal = function () {
     totalMad += 20 * days;
     totalEur += 2 * days;
     items.push(`+20 MAD / +2 EUR x ${days} (${getTranslation("reserve_child_seat")})`);
+  }
+
+  if (reserveInputs.secondDriver && reserveInputs.secondDriver.checked) {
+    totalMad += 20 * days;
+    totalEur += 2 * days;
+    items.push(`+20 MAD / +2 EUR x ${days} (${getTranslation("reserve_second_driver")})`);
   }
 
   return {
@@ -789,8 +802,15 @@ const updateReserveModalSummary = function () {
   }
 
   const estimatedTotalNode = document.querySelector("[data-reserve-estimated-total]");
+  const estimatedTotalHighlightNode = document.querySelector("[data-reserve-estimated-total-highlight]");
+  const estimatedTotalText = `${getTranslation("reserve_estimated_total")}: ${quote.totalMad || quote.totalEur ? `${quote.totalMad} MAD / ${quote.totalEur} EUR` : getTranslation("price_on_request")}`;
+
   if (estimatedTotalNode) {
-    estimatedTotalNode.textContent = `${getTranslation("reserve_estimated_total")}: ${quote.totalMad || quote.totalEur ? `${quote.totalMad} MAD / ${quote.totalEur} EUR` : getTranslation("price_on_request")}`;
+    estimatedTotalNode.textContent = estimatedTotalText;
+  }
+
+  if (estimatedTotalHighlightNode) {
+    estimatedTotalHighlightNode.textContent = estimatedTotalText;
   }
 };
 
