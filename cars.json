@@ -12,8 +12,12 @@
       "fuel": "Diesel",
       "seats": 7,
       "image": "🚐",
-      "image_url": "./assets/images/car-1.jpg",
-      "features": ["Climatisation", "Direction assistée", "Vitres électriques"],
+      "image_url": "./assets/images/cars/car-1.jpeg",
+      "features": [
+        "Climatisation",
+        "Direction assistée",
+        "Vitres électriques"
+      ],
       "description": "Monospace spacieux idéal pour les familles. Confortable et économique."
     },
     {
@@ -28,8 +32,12 @@
       "fuel": "Diesel",
       "seats": 5,
       "image": "🚗",
-      "image_url": "./assets/images/car-2.jpg",
-      "features": ["Climatisation", "Direction assistée", "Vitres électriques"],
+      "image_url": "./assets/images/cars/car-2.jpeg",
+      "features": [
+        "Climatisation",
+        "Direction assistée",
+        "Vitres électriques"
+      ],
       "description": "Berline fiable et économique. Parfait pour les trajets quotidiens."
     },
     {
@@ -44,8 +52,12 @@
       "fuel": "Diesel",
       "seats": 5,
       "image": "🚙",
-      "image_url": "./assets/images/car-3.jpg",
-      "features": ["Climatisation", "4x4", "Traction intégrale"],
+      "image_url": "./assets/images/cars/car-3.jpeg",
+      "features": [
+        "Climatisation",
+        "4x4",
+        "Traction intégrale"
+      ],
       "description": "SUV robuste pour l'aventure. Parfait pour explorer les routes du Maroc."
     },
     {
@@ -60,8 +72,12 @@
       "fuel": "Diesel",
       "seats": 5,
       "image": "🚗",
-      "image_url": "./assets/images/car-4.jpg",
-      "features": ["Climatisation", "Direction assistée", "Vitres électriques"],
+      "image_url": "./assets/images/cars/car-4.jpeg",
+      "features": [
+        "Climatisation",
+        "Direction assistée",
+        "Vitres électriques"
+      ],
       "description": "Citadine économique et maniable. Idéale pour la ville."
     },
     {
@@ -76,8 +92,12 @@
       "fuel": "Diesel",
       "seats": 5,
       "image": "🚙",
-      "image_url": "./assets/images/car-5.jpg",
-      "features": ["Climatisation automatique", "Toit panoramique", "Système audio premium"],
+      "image_url": "./assets/images/cars/car-5.jpeg",
+      "features": [
+        "Climatisation automatique",
+        "Toit panoramique",
+        "Système audio premium"
+      ],
       "description": "SUV premium allemand. Confort et performance garantis."
     },
     {
@@ -92,8 +112,12 @@
       "fuel": "Essence",
       "seats": 5,
       "image": "🚗",
-      "image_url": "./assets/images/car-6.jpg",
-      "features": ["Climatisation", "Écran tactile", "Système audio"],
+      "image_url": "./assets/images/cars/car-6.webp",
+      "features": [
+        "Climatisation",
+        "Écran tactile",
+        "Système audio"
+      ],
       "description": "Citadine moderne et élégante. Technologie et style."
     },
     {
@@ -108,8 +132,12 @@
       "fuel": "Diesel",
       "seats": 5,
       "image": "🚗",
-      "image_url": "./assets/images/car-2.jpg",
-      "features": ["Climatisation", "Direction assistée", "Vitres électriques"],
+      "image_url": "./assets/images/cars/car-7.webp",
+      "features": [
+        "Climatisation",
+        "Direction assistée",
+        "Vitres électriques"
+      ],
       "description": "Citadine française réputée. Qualité et fiabilité."
     },
     {
@@ -124,9 +152,33 @@
       "fuel": "Essence",
       "seats": 5,
       "image": "🚗",
-      "image_url": "./assets/images/car-6.jpg",
-      "features": ["Climatisation", "Écran tactile", "Caméra de recul"],
+      "image_url": "./assets/images/cars/car-8.jpeg",
+      "features": [
+        "Climatisation",
+        "Écran tactile",
+        "Caméra de recul"
+      ],
       "description": "Berline coréenne fiable. Bon rapport qualité-prix."
+    },
+    {
+      "id": 9,
+      "name": "RENAULT Clio 5",
+      "model": "Clio 5",
+      "brand": "RENAULT",
+      "year": 2023,
+      "price_eur": 30,
+      "price_mad": 300,
+      "transmission": "Manuelle",
+      "fuel": "Diesel",
+      "seats": 5,
+      "image": "🚗",
+      "image_url": "./assets/images/cars/car-9.jpeg",
+      "features": [
+        "Climatisation",
+        "Direction assistée",
+        "Vitres électriques"
+      ],
+      "description": "Version diesel manuelle de la Clio 5, économique et polyvalente."
     }
   ]
 }
