@@ -464,6 +464,53 @@ button, a { transition: var(--transition); }
   text-transform: uppercase;
 }
 
+
+
+/*-----------------------------------*\
+  #ABOUT
+\*-----------------------------------*/
+
+.about {
+  background:
+    radial-gradient(circle at top right, hsla(204, 91%, 53%, 0.07), transparent 32%),
+    radial-gradient(circle at bottom left, hsla(152, 63%, 43%, 0.06), transparent 28%);
+}
+
+.about-header {
+  max-width: 760px;
+  margin-bottom: 24px;
+}
+
+.about-text {
+  color: var(--independence);
+  font-size: var(--fs-6);
+  line-height: 1.8;
+  margin-top: 12px;
+}
+
+.about-list {
+  display: grid;
+  gap: 16px;
+}
+
+.about-card {
+  background: linear-gradient(180deg, var(--white), hsla(216, 75%, 97%, 0.96));
+  border: 1px solid hsla(204, 91%, 53%, 0.1);
+  border-radius: var(--radius-18);
+  padding: 20px;
+  box-shadow: var(--shadow-1);
+}
+
+.about-card-title {
+  margin-bottom: 8px;
+}
+
+.about-card-text {
+  color: var(--independence);
+  font-size: var(--fs-6);
+  line-height: 1.7;
+}
+
 .location {
   position: relative;
   overflow: hidden;
@@ -1243,6 +1290,27 @@ button, a { transition: var(--transition); }
   opacity: 0.9;
 }
 
+.request-legal-links {
+  margin-top: 10px;
+  color: var(--independence);
+  font-size: var(--fs-7);
+  line-height: 1.7;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.request-legal-links a {
+  color: var(--carolina-blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.request-legal-links a:is(:hover, :focus) {
+  color: var(--medium-sea-green);
+}
+
 .request-submit {
   width: 100%;
   margin-top: 18px;
@@ -1678,6 +1746,10 @@ button, a { transition: var(--transition); }
 }
 
 @media (min-width: 768px) {
+  .about-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .reserve-summary-top {
     grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
     align-items: stretch;
