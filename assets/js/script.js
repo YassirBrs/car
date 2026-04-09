@@ -13,6 +13,7 @@ const navbar = document.querySelector("[data-navbar]");
 const navToggleBtn = document.querySelector("[data-nav-toggle-btn]");
 const navbarLinks = document.querySelectorAll("[data-nav-link]");
 const featuredCarList = document.querySelector("[data-featured-car-list]");
+const placesList = document.querySelector("[data-places-list]");
 const heroForm = document.querySelector(".hero-form");
 const rentalRequestForm = document.querySelector("[data-rental-request-form]");
 const reserveModal = document.querySelector("[data-reserve-modal]");
@@ -86,6 +87,7 @@ const reserveInputs = {
 const whatsappNumber = "212655867044";
 
 let allCars = [];
+let allPlaces = [];
 let filterTimer = null;
 let translations = {};
 let currentLanguage = getInitialLanguage();
@@ -109,6 +111,8 @@ const fallbackEnglishTranslations = {
   seats_unavailable: "seats unavailable",
   rent_now: "Rent now",
   no_cars_match: "No cars match your search.",
+  no_places_available: "No places available right now.",
+  unable_load_places: "Unable to load places right now.",
   unable_load_cars: "Unable to load cars right now.",
   whatsapp_hello: "Hello, I’m interested in {title}.",
   whatsapp_car_details: "Car details",
@@ -424,7 +428,78 @@ function setLanguage(language) {
     populateModelOptions(allCars, requestInputs.brand ? requestInputs.brand.value : "", requestInputs.model);
     applyFilters(false);
   }
+
+  if (allPlaces.length) {
+    renderPlaces(allPlaces);
+  }
 }
+
+/**
+ * places from JSON
+ */
+
+const renderPlaceCard = function (place) {
+  const title = place.title || "";
+  const image = place.image || "";
+  const alt = place.alt || title;
+  const mapUrl = place.map_url || "#";
+  const badge = place.badge_key ? getTranslation(place.badge_key) : "";
+  const description = place.desc_key ? getTranslation(place.desc_key) : "";
+  const meta = place.meta_key ? getTranslation(place.meta_key) : "";
+
+  return `
+    <li>
+      <div class="blog-card">
+        <figure class="card-banner">
+          <a href="${escapeHtml(mapUrl)}">
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(alt)}" loading="lazy" class="w-100">
+          </a>
+          <a href="${escapeHtml(mapUrl)}" class="btn card-badge">${escapeHtml(badge)}</a>
+        </figure>
+        <div class="card-content">
+          <h3 class="h3 card-title">
+            <a href="${escapeHtml(mapUrl)}">${escapeHtml(title)}</a>
+          </h3>
+          <p class="place-text">${escapeHtml(description)}</p>
+          <div class="card-meta">
+            <span class="place-meta">${escapeHtml(meta)}</span>
+          </div>
+        </div>
+      </div>
+    </li>
+  `;
+};
+
+const renderPlaces = function (places) {
+  if (!placesList) {
+    return;
+  }
+
+  placesList.innerHTML = places.length
+    ? places.map(renderPlaceCard).join("")
+    : `<li class="featured-car-empty">${escapeHtml(getTranslation("no_places_available"))}</li>`;
+};
+
+const loadPlaces = async function () {
+  if (!placesList) {
+    return;
+  }
+
+  try {
+    const response = await fetch("./places.json", { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error(`Failed to load places.json: ${response.status}`);
+    }
+
+    const data = await response.json();
+    allPlaces = Array.isArray(data.places) ? data.places : [];
+    renderPlaces(allPlaces);
+  } catch (error) {
+    console.error(error);
+    placesList.innerHTML = `<li class="featured-car-empty">${escapeHtml(getTranslation("unable_load_places"))}</li>`;
+  }
+};
 
 /**
  * featured cars from JSON
@@ -1196,6 +1271,7 @@ const initialize = async function () {
   bindRentalRequestForm();
   bindHeroForm();
   bindDateInputUX();
+  await loadPlaces();
   await loadFeaturedCars();
 };
 

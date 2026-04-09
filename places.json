@@ -1,0 +1,94 @@
+{
+  "places": [
+    {
+      "id": 1,
+      "title": "Kasbah Oufella",
+      "image": "./assets/images/places/kasbah-oufella.jpg",
+      "alt": "Kasbah Oufella in Agadir",
+      "badge_key": "place1_badge",
+      "desc_key": "place1_desc",
+      "meta_key": "place1_meta",
+      "map_url": "https://www.google.com/maps/search/?api=1&query=Kasbah+Oufella+Agadir"
+    },
+    {
+      "id": 2,
+      "title": "Souk El Had",
+      "image": "./assets/images/places/souk-el-had.jpg",
+      "alt": "Souk El Had market in Agadir",
+      "badge_key": "place2_badge",
+      "desc_key": "place2_desc",
+      "meta_key": "place2_meta",
+      "map_url": "https://www.google.com/maps/search/?api=1&query=Souk+El+Had+Agadir"
+    },
+    {
+      "id": 3,
+      "title": "Agadir Marina",
+      "image": "./assets/images/places/agadir-marina.jpg",
+      "alt": "Agadir Marina waterfront",
+      "badge_key": "place3_badge",
+      "desc_key": "place3_desc",
+      "meta_key": "place3_meta",
+      "map_url": "https://www.google.com/maps/search/?api=1&query=Agadir+Marina"
+    },
+    {
+      "id": 4,
+      "title": "Agadir Corniche",
+      "image": "./assets/images/places/agadir-corniche.jpg",
+      "alt": "Agadir beach promenade",
+      "badge_key": "place4_badge",
+      "desc_key": "place4_desc",
+      "meta_key": "place4_meta",
+      "map_url": "https://www.google.com/maps/search/?api=1&query=Agadir+Corniche"
+    },
+    {
+      "id": 5,
+      "title": "Crocoparc Agadir",
+      "image": "./assets/images/places/crocoparc.jpg",
+      "alt": "Crocoparc Agadir gardens",
+      "badge_key": "place5_badge",
+      "desc_key": "place5_desc",
+      "meta_key": "place5_meta",
+      "map_url": "https://www.google.com/maps/search/?api=1&query=Crocoparc+Agadir"
+    },
+    {
+      "id": 6,
+      "title": "Taghazout",
+      "image": "./assets/images/places/taghazout.jpg",
+      "alt": "Taghazout surf village",
+      "badge_key": "place6_badge",
+      "desc_key": "place6_desc",
+      "meta_key": "place6_meta",
+      "map_url": "https://www.google.com/maps/search/?api=1&query=Taghazout+Morocco"
+    },
+    {
+      "id": 7,
+      "title": "Anza",
+      "image": "./assets/images/places/anza.jpg",
+      "alt": "Anza beach and surf spot",
+      "badge_key": "place7_badge",
+      "desc_key": "place7_desc",
+      "meta_key": "place7_meta",
+      "map_url": "https://www.google.com/maps/search/?api=1&query=Anza+Agadir"
+    },
+    {
+      "id": 8,
+      "title": "Imsouane",
+      "image": "./assets/images/places/imsouane.jpg",
+      "alt": "Imsouane surf bay",
+      "badge_key": "place8_badge",
+      "desc_key": "place8_desc",
+      "meta_key": "place8_meta",
+      "map_url": "https://www.google.com/maps/search/?api=1&query=Imsouane+Morocco"
+    },
+    {
+      "id": 9,
+      "title": "Surf coast day trips",
+      "image": "./assets/images/places/surf-coast-day-trips.jpg",
+      "alt": "Surf spots near Agadir",
+      "badge_key": "place9_badge",
+      "desc_key": "place9_desc",
+      "meta_key": "place9_meta",
+      "map_url": "https://www.google.com/maps/search/?api=1&query=Paradise+Valley+Agadir"
+    }
+  ]
+}
